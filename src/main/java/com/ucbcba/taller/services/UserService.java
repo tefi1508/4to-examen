@@ -10,5 +10,5 @@ public interface UserService {
 
     User findByUsername(String username);
 
-
+    Iterable<User> listAllUsers();
 }

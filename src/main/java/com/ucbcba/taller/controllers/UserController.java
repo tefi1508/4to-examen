@@ -2,6 +2,7 @@ package com.ucbcba.taller.controllers;
 
 
 
+import com.ucbcba.taller.entities.Comment;
 import com.ucbcba.taller.entities.User;
 import com.ucbcba.taller.services.SecurityService;
 import com.ucbcba.taller.services.UserService;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -128,6 +131,45 @@ public class UserController {
         boolean adm = true;
         user.setAdmin(adm);
         return "redirect:/bienvenidos";
+    }
+
+    int cantComentarios(User u){
+        int tam=u.getComments().size();
+        int cont=0;
+        if (tam>0){
+            for (Comment c : u.getComments()) {
+                cont = cont + 1;
+            }
+        }
+
+        return  cont;
+
+    }
+
+    List<User> ordenar(List<User> listUsers){
+        User aux;
+        for (int i=0; i<listUsers.size()-1; i++)
+        {
+            for (int j=i+1; j<listUsers.size(); j++)
+            {
+                if(cantComentarios(listUsers.get(i)) <cantComentarios(listUsers.get(j)))
+                {
+                    aux = listUsers.get(i);
+                    listUsers.set(i,listUsers.get(j));
+                    listUsers.set(j,aux);
+                }
+            }
+        }
+        return listUsers;
+    }
+
+    @RequestMapping(value = "/Order/User",method = RequestMethod.GET)
+    public String orderRestaurants(/*@PathVariable Model model*/) {
+        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<User> listUsers = (List<User>) userService.listAllUsers();
+        //model.addAttribute("listUsers", listUsers);
+        System.out.println(ordenar(listUsers).size());
+        return "welcome";
     }
 
 }

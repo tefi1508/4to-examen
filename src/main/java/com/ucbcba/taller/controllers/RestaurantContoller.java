@@ -98,6 +98,7 @@ public class RestaurantContoller {
         return  rankin;
 
     }
+
     List<Restaurant> ordenar(List<Restaurant> listRes){
         Restaurant aux;
         for (int i=0; i<listRes.size()-1; i++)
@@ -170,7 +171,6 @@ public class RestaurantContoller {
         System.out.println(x);
         System.out.println(ordenar(restList).size());
         return "welcome";
-
     }
 
     @RequestMapping(value = "/Restaurants",method = RequestMethod.GET)
